@@ -33,26 +33,15 @@ Each book document should follow this structure:
 🔧 Step 1: Start MongoDB
 Make sure your MongoDB server is running:
 
-bash
-Copy
-Edit
-mongod
+
 🔧 Step 2: Open Mongo Shell
-bash
-Copy
-Edit
-mongo
+
 Then select your database:
 
-js
-Copy
-Edit
 use your_database_name
 
 📚 Basic CRUD Operations
-js
-Copy
-Edit
+
 // Find books in the Dystopian genre
 db.books.find({ genre: 'Dystopian' })
 
@@ -72,9 +61,7 @@ db.books.updateOne(
 db.books.deleteOne({ title: 'Pride and Prejudice' })
 
 📊 Advanced Queries
-js
-Copy
-Edit
+
 // Find in-stock books published after 2010
 db.books.find({ in_stock: true, published_year: { $gt: 2010 } })
 
@@ -94,18 +81,14 @@ let skip = (page - 1) * limit;
 db.books.find().skip(skip).limit(limit).pretty();
 
 🧮 Aggregation Pipeline
-js
-Copy
-Edit
+
 // Get average price grouped by genre
 db.books.aggregate([
   { $group: { _id: "$genre", avgPrice: { $avg: "$price" } } }
 ])
 
 ⚡ Indexing & Query Performance
-js
-Copy
-Edit
+
 // Create index on title
 db.books.createIndex({ title: 1 })
 
@@ -118,11 +101,3 @@ db.books.find({ title: "Things Fall Apart" }).explain("executionStats")
 Ensure you have meaningful data in your books collection before running queries.
 
 Replace the ObjectId with one that exists in your data when running the updateOne query.
-
-🧼 Clean Up (Optional)
-If you want to remove all books:
-
-js
-Copy
-Edit
-db.books.deleteMany({})
