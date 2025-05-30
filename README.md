@@ -1,47 +1,128 @@
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-2e0aaae1b6195c2367325f4f02e2d04e9abb55f0b24a779b69b11b9e10269abc.svg)](https://classroom.github.com/online_ide?assignment_repo_id=19654772&assignment_repo_type=AssignmentRepo)
-# MongoDB Fundamentals Assignment
+# 📚 MongoDB CRUD & Aggregation Script
 
-This assignment focuses on learning MongoDB fundamentals including setup, CRUD operations, advanced queries, aggregation pipelines, and indexing.
+This project demonstrates basic and advanced **CRUD operations**, **aggregation**, **indexing**, and **query performance analysis** using MongoDB.
 
-## Assignment Overview
+---
 
-You will:
-1. Set up a MongoDB database
-2. Perform basic CRUD operations
-3. Write advanced queries with filtering, projection, and sorting
-4. Create aggregation pipelines for data analysis
-5. Implement indexing for performance optimization
+## 📁 Prerequisites
 
-## Getting Started
+Make sure you have the following installed:
 
-1. Accept the GitHub Classroom assignment invitation
-2. Clone your personal repository that was created by GitHub Classroom
-3. Install MongoDB locally or set up a MongoDB Atlas account
-4. Run the provided `insert_books.js` script to populate your database
-5. Complete the tasks in the assignment document
+- [MongoDB](https://www.mongodb.com/try/download/community) (version 4.0+)
+- MongoDB Shell (`mongo`) or a GUI like [MongoDB Compass](https://www.mongodb.com/products/compass)
+- A `books` collection with relevant documents
 
-## Files Included
+---
 
-- `Week1-Assignment.md`: Detailed assignment instructions
-- `insert_books.js`: Script to populate your MongoDB database with sample book data
+## 🗂 Collection Structure (Sample Document)
 
-## Requirements
+Each book document should follow this structure:
 
-- Node.js (v18 or higher)
-- MongoDB (local installation or Atlas account)
-- MongoDB Shell (mongosh) or MongoDB Compass
+```json
+{
+  "_id": ObjectId("..."),
+  "title": "Book Title",
+  "author": "Author Name",
+  "genre": "Genre",
+  "published_year": 2000,
+  "price": 10.99,
+  "in_stock": true
+}
 
-## Submission
+🚀 Running the Scripts
+🔧 Step 1: Start MongoDB
+Make sure your MongoDB server is running:
 
-Your work will be automatically submitted when you push to your GitHub Classroom repository. Make sure to:
+bash
+Copy
+Edit
+mongod
+🔧 Step 2: Open Mongo Shell
+bash
+Copy
+Edit
+mongo
+Then select your database:
 
-1. Complete all tasks in the assignment
-2. Add your `queries.js` file with all required MongoDB queries
-3. Include a screenshot of your MongoDB database
-4. Update the README.md with your specific setup instructions
+js
+Copy
+Edit
+use your_database_name
 
-## Resources
+📚 Basic CRUD Operations
+js
+Copy
+Edit
+// Find books in the Dystopian genre
+db.books.find({ genre: 'Dystopian' })
 
-- [MongoDB Documentation](https://docs.mongodb.com/)
-- [MongoDB University](https://university.mongodb.com/)
-- [MongoDB Node.js Driver](https://mongodb.github.io/node-mongodb-native/) 
+// Find books published after 1932
+db.books.find({ published_year: { $gt: 1932 } })
+
+// Find all books by Jane Austen
+db.books.find({ author: "Jane Austen" })
+
+// Update the price of a specific book
+db.books.updateOne(
+  { _id: ObjectId("683912821e3ed4563913c52f") },
+  { $set: { price: 7.88 } }
+)
+
+// Delete a book by title
+db.books.deleteOne({ title: 'Pride and Prejudice' })
+
+📊 Advanced Queries
+js
+Copy
+Edit
+// Find in-stock books published after 2010
+db.books.find({ in_stock: true, published_year: { $gt: 2010 } })
+
+// Find Fantasy books with specific fields
+db.books.find({ genre: "Fantasy" }, { title: 1, author: 1, price: 1 })
+
+// Sort books by price (ascending)
+db.books.find().sort({ price: 1 })
+
+// Sort books by price (descending)
+db.books.find().sort({ price: -1 })
+
+// Pagination: page 2, 5 books per page
+let page = 2;
+let limit = 5;
+let skip = (page - 1) * limit;
+db.books.find().skip(skip).limit(limit).pretty();
+
+🧮 Aggregation Pipeline
+js
+Copy
+Edit
+// Get average price grouped by genre
+db.books.aggregate([
+  { $group: { _id: "$genre", avgPrice: { $avg: "$price" } } }
+])
+
+⚡ Indexing & Query Performance
+js
+Copy
+Edit
+// Create index on title
+db.books.createIndex({ title: 1 })
+
+// Compound index on author and published_year
+db.books.createIndex({ author: 1, published_year: 1 })
+
+// Explain query plan for a title search
+db.books.find({ title: "Things Fall Apart" }).explain("executionStats")
+📌 Notes
+Ensure you have meaningful data in your books collection before running queries.
+
+Replace the ObjectId with one that exists in your data when running the updateOne query.
+
+🧼 Clean Up (Optional)
+If you want to remove all books:
+
+js
+Copy
+Edit
+db.books.deleteMany({})
